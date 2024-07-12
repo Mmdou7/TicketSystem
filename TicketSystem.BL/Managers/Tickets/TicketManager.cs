@@ -1,4 +1,5 @@
-﻿using TicketSystem.BL.ViewModels;
+﻿using System.Text.RegularExpressions;
+using TicketSystem.BL.ViewModels;
 using TicketSystem.DAL;
 using TicketSystem.DAL.Repositories.Tickets;
 using static TicketSystem.BL.Common.Constants.Constant;
@@ -44,7 +45,7 @@ public class TicketManager : ITicketManager
         {
             return new GeneralResponse<TicketReadVm>
             {
-                StatusCode = 200,
+                StatusCode = 001,
                 Message = string.Format(ErrorMessages.TicketNotFound, id),
                 Data = null
             };
@@ -66,25 +67,55 @@ public class TicketManager : ITicketManager
         };
     }
 
-    public async Task<string> AddTicketAsync(TicketAddVm model)
+    public async Task<GeneralResponse<string>> AddTicketAsync(TicketAddVm model)
     {
-        Ticket ticket = new Ticket()
+        if (model == null || string.IsNullOrEmpty(model.PhoneNumber) ||
+            string.IsNullOrEmpty(model.City) ||
+            string.IsNullOrEmpty(model.Governorate) ||
+            string.IsNullOrEmpty(model.District))
         {
-            PhoneNumber = model.PhoneNumber,
-            CreationDateTime = DateTime.Now,
-            City = model.City,
-            Governorate = model.Governorate,
-            District = model.District,
-            Status = "Unhandled"
-        };
-
-        _ticketRepository.AddTicket(ticket);
-
-        _ticketRepository.SaveChanges();
-        var msg = Messages.AddedSuccessfully;
-
-        return msg;
+            return new GeneralResponse<string>
+            {
+                StatusCode = 002,
+                Message = ErrorMessages.InvalidModel,
+                Data = null
+            };
+        }
+        if (!Regex.IsMatch(model.PhoneNumber, @"^\d+$"))
+        {
+            return new GeneralResponse<string>
+            {
+                StatusCode = 003,
+                Message = ErrorMessages.InvalidPhoneNumber,
+                Data = null
+            };
+        }
+        try
+        {
+            Ticket ticket = new Ticket()
+            {
+                PhoneNumber = model.PhoneNumber,
+                CreationDateTime = DateTime.Now,
+                City = model.City,
+                Governorate = model.Governorate,
+                District = model.District,
+                Status = "Unhandled"
+            };
+            _ticketRepository.Add(ticket);
+            _ticketRepository.SaveChanges();
+            return new GeneralResponse<string>
+            {
+                StatusCode = 003,
+                Message = Messages.AddedSuccessfully,
+                Data = null
+            };
+        }
+        catch (Exception ex)
+        {
+            throw new Exception(ErrorMessages.TicketNotAdded, ex);
+        }
     }
 
-   
+
+
 }
