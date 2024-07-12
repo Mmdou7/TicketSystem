@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using TicketSystem.BL;
 using TicketSystem.DAL;
 using TicketSystem.DAL.Repositories.Tickets;
 
@@ -15,6 +16,7 @@ var ConnectionString = builder.Configuration.GetConnectionString("TickectSystem"
 builder.Services.AddDbContext<SystemContext>(options =>
 options.UseSqlServer(ConnectionString));
 
+builder.Services.AddScoped<ITicketManager, TicketManager>();
 builder.Services.AddScoped<ITicketRepository, TicketRepository>();
 
 var app = builder.Build();

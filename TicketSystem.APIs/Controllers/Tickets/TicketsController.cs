@@ -14,7 +14,7 @@ public class TicketsController : ControllerBase
         _ticketManager = ticketManager;
     }
 
-    [HttpGet]
+    [HttpPost("filter")]
     public async Task<IActionResult> Filter(TicketFilterInputVm model )
     {
         var result = await _ticketManager.FilterAsync(model);

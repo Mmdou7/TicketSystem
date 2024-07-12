@@ -36,25 +36,36 @@ public class TicketManager : ITicketManager
         return result;
     }
 
-    public async Task<TicketReadVm> GetTicketByIdAsync(int id)
+    public async Task<GeneralResponse<TicketReadVm>> GetTicketByIdAsync(int id)
     {
         Ticket? ticket = _ticketRepository.GetById(id);
 
         if (ticket == null)
         {
-            throw new Exception(string.Format(ErrorMessages.TicketNotFound, id));
+            return new GeneralResponse<TicketReadVm>
+            {
+                StatusCode = 200,
+                Message = string.Format(ErrorMessages.TicketNotFound, id),
+                Data = null
+            };
         }
-        return new TicketReadVm
+        return new GeneralResponse<TicketReadVm>
         {
-            Id = ticket.Id,
-            PhoneNumber = ticket.PhoneNumber,
-            CreationDateTime = ticket.CreationDateTime,
-            City = ticket.City,
-            District = ticket.District,
-            Governorate = ticket.Governorate,
-            Status = ticket.Status
+            StatusCode = 200,
+            Message = "Ticket found successfully.",
+            Data = new TicketReadVm
+            {
+                Id = ticket.Id,
+                PhoneNumber = ticket.PhoneNumber,
+                CreationDateTime = ticket.CreationDateTime,
+                City = ticket.City,
+                District = ticket.District,
+                Governorate = ticket.Governorate,
+                Status = ticket.Status
+            }
         };
     }
+
     public async Task<string> AddTicketAsync(TicketAddVm model)
     {
         Ticket ticket = new Ticket()

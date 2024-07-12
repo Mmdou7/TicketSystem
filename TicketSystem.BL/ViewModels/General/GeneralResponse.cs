@@ -1,10 +1,10 @@
-﻿namespace TicketSystem.BL;
+﻿using NPOI.SS.Formula.Functions;
 
-public class GeneralResponse
+namespace TicketSystem.BL;
+
+public class GeneralResponse<T>
 {
+    public int StatusCode { get; set; }
     public string Message { get; set; }
-    public GeneralResponse(string msg)
-    {
-        Message = msg;
-    }
+    public T? Data { get; set; }
 }
