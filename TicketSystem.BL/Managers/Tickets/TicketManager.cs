@@ -16,8 +16,23 @@ public class TicketManager : ITicketManager
     public async Task<PagedResultVm<TicketReadVm>> FilterAsync(TicketFilterInputVm model)
     {
         IEnumerable<Ticket> query = _ticketRepository.GetAll();
+        bool isUpdated = false;
 
-        var tickets = query.Skip(model.PageSize * --model.PageNumber).Take(model.PageSize).Select(t => new TicketReadVm
+        foreach (var ticket in query)
+        {
+            if (ticket.CreationDateTime >= DateTime.Now.AddMinutes(-60) && ticket.Status != "Handled")
+            {
+                ticket.Status = "Handled";
+                isUpdated = true;
+            }
+        }
+
+        if (isUpdated)
+        {
+            _ticketRepository.SaveChanges();
+        }
+
+        var pagedTickets = query.Skip(model.PageSize * --model.PageNumber).Take(model.PageSize).Select(t => new TicketReadVm
         {
             Id = t.Id,
             PhoneNumber = t.PhoneNumber,
@@ -27,15 +42,16 @@ public class TicketManager : ITicketManager
             Governorate = t.Governorate,
             Status = t.Status
         }).ToList();
-           
+
         var result = new PagedResultVm<TicketReadVm>
         {
             TotalCount = query.Count(),
-            Result = tickets
+            Result = pagedTickets
         };
 
         return result;
     }
+
 
     public async Task<GeneralResponse<TicketReadVm>> GetTicketByIdAsync(int id)
     {
@@ -99,7 +115,7 @@ public class TicketManager : ITicketManager
                 City = model.City,
                 Governorate = model.Governorate,
                 District = model.District,
-                Status = "Unhandled"
+                Status = "UnHandled"
             };
             _ticketRepository.Add(ticket);
             _ticketRepository.SaveChanges();
@@ -116,6 +132,50 @@ public class TicketManager : ITicketManager
         }
     }
 
+    public async Task<GeneralResponse<TicketReadVm>> ChangeStatusAsync(int id)
+    {
+        try
+        {
+            Ticket? ticket = _ticketRepository.GetById(id);
 
+            if (ticket == null)
+            {
+                return new GeneralResponse<TicketReadVm>
+                {
+                    StatusCode = 001,
+                    Message = string.Format(ErrorMessages.TicketNotFound, id),
+                    Data = null
+                };
+            }
+
+            ticket.Status = "Handled";
+            _ticketRepository.SaveChanges();
+
+            return new GeneralResponse<TicketReadVm>
+            {
+                StatusCode = 004,
+                Message = Messages.StatusUpdatedSuccessfully,
+                Data = new TicketReadVm
+                {
+                    Id = ticket.Id,
+                    PhoneNumber = ticket.PhoneNumber,
+                    CreationDateTime = ticket.CreationDateTime,
+                    City = ticket.City,
+                    District = ticket.District,
+                    Governorate = ticket.Governorate,
+                    Status = ticket.Status
+                }
+            };
+        }
+        catch (Exception ex)
+        {
+            return new GeneralResponse<TicketReadVm>
+            {
+                StatusCode = 007,
+                Message = ErrorMessages.ErrorHappened,
+                Data = null
+            };
+        }
+    }
 
 }

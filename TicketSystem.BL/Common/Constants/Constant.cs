@@ -4,7 +4,8 @@ public class Constant
 {
     public static class Messages
     {
-        public const string AddedSuccessfully = "تمت الإضافة بنجاح";      
+        public const string AddedSuccessfully = "تمت الإضافة بنجاح";
+        public const string StatusUpdatedSuccessfully = "تم التعديل بنجاح.";
     }
     public static class ErrorMessages
     {
