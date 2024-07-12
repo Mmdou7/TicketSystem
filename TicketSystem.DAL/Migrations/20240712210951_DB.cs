@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace TicketSystem.DAL.Migrations
 {
     /// <inheritdoc />
-    public partial class createDB : Migration
+    public partial class DB : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -24,7 +24,7 @@ namespace TicketSystem.DAL.Migrations
                     Governorate = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     City = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     District = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    isHandled = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -33,12 +33,12 @@ namespace TicketSystem.DAL.Migrations
 
             migrationBuilder.InsertData(
                 table: "Tickets",
-                columns: new[] { "Id", "City", "CreationDateTime", "District", "Governorate", "PhoneNumber", "Status" },
+                columns: new[] { "Id", "City", "CreationDateTime", "District", "Governorate", "PhoneNumber", "isHandled" },
                 values: new object[,]
                 {
-                    { 1, "City1", new DateTime(2024, 7, 11, 0, 0, 0, 0, DateTimeKind.Unspecified), "District1", "Governorate1", "1234567890", "Handled" },
-                    { 2, "City2", new DateTime(2024, 7, 11, 0, 0, 0, 0, DateTimeKind.Unspecified), "District2", "Governorate2", "0987654321", "Handled" },
-                    { 3, "City3", new DateTime(2024, 7, 9, 0, 0, 0, 0, DateTimeKind.Unspecified), "District3", "Governorate3", "0987784321", "Handled" }
+                    { 1, "City1", new DateTime(2024, 7, 11, 0, 0, 0, 0, DateTimeKind.Unspecified), "District1", "Governorate1", "1234567890", false },
+                    { 2, "City2", new DateTime(2024, 7, 11, 0, 0, 0, 0, DateTimeKind.Unspecified), "District2", "Governorate2", "0987654321", true },
+                    { 3, "City3", new DateTime(2024, 7, 9, 0, 0, 0, 0, DateTimeKind.Unspecified), "District3", "Governorate3", "0987784321", false }
                 });
         }
 

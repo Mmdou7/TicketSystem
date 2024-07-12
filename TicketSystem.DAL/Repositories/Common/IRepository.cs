@@ -9,9 +9,9 @@ namespace TicketSystem.DAL.Repositories.Common
     public interface IRepository<T> where T : class
     {
         IQueryable<T> GetAll();
-        T GetById(int id);
-        void Add(T entity);
-        int SaveChanges();
+        Task<T> GetById(int id);
+        Task Add(T entity);
+        Task<int> SaveChanges();
         
     }
 }

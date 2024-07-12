@@ -12,8 +12,8 @@ using TicketSystem.DAL;
 namespace TicketSystem.DAL.Migrations
 {
     [DbContext(typeof(SystemContext))]
-    [Migration("20240712025036_createDB")]
-    partial class createDB
+    [Migration("20240712210951_DB")]
+    partial class DB
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -52,9 +52,8 @@ namespace TicketSystem.DAL.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<bool>("isHandled")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
@@ -69,7 +68,7 @@ namespace TicketSystem.DAL.Migrations
                             District = "District1",
                             Governorate = "Governorate1",
                             PhoneNumber = "1234567890",
-                            Status = "Handled"
+                            isHandled = false
                         },
                         new
                         {
@@ -79,7 +78,7 @@ namespace TicketSystem.DAL.Migrations
                             District = "District2",
                             Governorate = "Governorate2",
                             PhoneNumber = "0987654321",
-                            Status = "Handled"
+                            isHandled = true
                         },
                         new
                         {
@@ -89,7 +88,7 @@ namespace TicketSystem.DAL.Migrations
                             District = "District3",
                             Governorate = "Governorate3",
                             PhoneNumber = "0987784321",
-                            Status = "Handled"
+                            isHandled = false
                         });
                 });
 #pragma warning restore 612, 618

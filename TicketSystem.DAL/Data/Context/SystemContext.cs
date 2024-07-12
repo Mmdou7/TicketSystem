@@ -21,7 +21,7 @@ namespace TicketSystem.DAL
                     Governorate = "Governorate1",
                     City = "City1",
                     District = "District1",
-                    Status = "Handled"
+                    isHandled = false
                 },
                 new Ticket
                 {
@@ -31,7 +31,7 @@ namespace TicketSystem.DAL
                     Governorate = "Governorate2",
                     City = "City2",
                     District = "District2",
-                    Status = "Handled"
+                    isHandled = true
                 },
                 new Ticket
                 {
@@ -41,7 +41,7 @@ namespace TicketSystem.DAL
                     Governorate = "Governorate3",
                     City = "City3",
                     District = "District3",
-                    Status = "Handled"
+                    isHandled = false
                 }
             );
             #endregion

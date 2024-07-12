@@ -2,6 +2,7 @@
 using TicketSystem.BL.ViewModels;
 using TicketSystem.DAL;
 using TicketSystem.DAL.Repositories.Tickets;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using static TicketSystem.BL.Common.Constants.Constant;
 
 namespace TicketSystem.BL;
@@ -20,18 +21,17 @@ public class TicketManager : ITicketManager
 
         foreach (var ticket in query)
         {
-            if (ticket.CreationDateTime >= DateTime.Now.AddMinutes(-60) && ticket.Status != "Handled")
+            if (ticket.CreationDateTime >= DateTime.Now.AddMinutes(-60) && !ticket.isHandled)
             {
-                ticket.Status = "Handled";
+                ticket.isHandled = true;
                 isUpdated = true;
             }
         }
-
         if (isUpdated)
         {
-            _ticketRepository.SaveChanges();
+            await _ticketRepository.SaveChanges();
         }
-
+        
         var pagedTickets = query.Skip(model.PageSize * --model.PageNumber).Take(model.PageSize).Select(t => new TicketReadVm
         {
             Id = t.Id,
@@ -40,7 +40,7 @@ public class TicketManager : ITicketManager
             City = t.City,
             District = t.District,
             Governorate = t.Governorate,
-            Status = t.Status
+            IsHandled = t.isHandled
         }).ToList();
 
         var result = new PagedResultVm<TicketReadVm>
@@ -55,7 +55,7 @@ public class TicketManager : ITicketManager
 
     public async Task<GeneralResponse<TicketReadVm>> GetTicketByIdAsync(int id)
     {
-        Ticket? ticket = _ticketRepository.GetById(id);
+        Ticket? ticket = await _ticketRepository.GetById(id);
 
         if (ticket == null)
         {
@@ -66,6 +66,17 @@ public class TicketManager : ITicketManager
                 Data = null
             };
         }
+        bool isUpdated = false;
+        if (ticket.CreationDateTime >= DateTime.Now.AddMinutes(-60) && !ticket.isHandled)
+        {
+            ticket.isHandled = true;
+            isUpdated = true;
+        }
+        if (isUpdated)
+        {
+            await _ticketRepository.SaveChanges();
+        }
+
         return new GeneralResponse<TicketReadVm>
         {
             StatusCode = 200,
@@ -78,7 +89,7 @@ public class TicketManager : ITicketManager
                 City = ticket.City,
                 District = ticket.District,
                 Governorate = ticket.Governorate,
-                Status = ticket.Status
+                IsHandled = ticket.isHandled
             }
         };
     }
@@ -115,10 +126,10 @@ public class TicketManager : ITicketManager
                 City = model.City,
                 Governorate = model.Governorate,
                 District = model.District,
-                Status = "UnHandled"
+                isHandled = false
             };
-            _ticketRepository.Add(ticket);
-            _ticketRepository.SaveChanges();
+            await _ticketRepository.Add(ticket);
+            await _ticketRepository.SaveChanges();
             return new GeneralResponse<string>
             {
                 StatusCode = 003,
@@ -136,7 +147,7 @@ public class TicketManager : ITicketManager
     {
         try
         {
-            Ticket? ticket = _ticketRepository.GetById(id);
+            Ticket? ticket = await _ticketRepository.GetById(id);
 
             if (ticket == null)
             {
@@ -148,8 +159,8 @@ public class TicketManager : ITicketManager
                 };
             }
 
-            ticket.Status = "Handled";
-            _ticketRepository.SaveChanges();
+            ticket.isHandled = true;
+            await _ticketRepository.SaveChanges();
 
             return new GeneralResponse<TicketReadVm>
             {
@@ -163,7 +174,7 @@ public class TicketManager : ITicketManager
                     City = ticket.City,
                     District = ticket.District,
                     Governorate = ticket.Governorate,
-                    Status = ticket.Status
+                    IsHandled = ticket.isHandled
                 }
             };
         }

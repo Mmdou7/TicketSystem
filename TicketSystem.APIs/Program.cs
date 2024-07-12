@@ -19,6 +19,18 @@ options.UseSqlServer(ConnectionString));
 builder.Services.AddScoped<ITicketManager, TicketManager>();
 builder.Services.AddScoped<ITicketRepository, TicketRepository>();
 
+// Add CORS policy
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAngularApp",
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:4200")
+                  .AllowAnyHeader()
+                  .AllowAnyMethod();
+        });
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -29,6 +41,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+// Use CORS policy
+app.UseCors("AllowAngularApp");
 
 app.UseAuthorization();
 

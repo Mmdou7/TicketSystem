@@ -21,18 +21,18 @@ namespace TicketSystem.DAL.Repositories.Common
             return _entities;
         }
 
-        public TEntity GetById(int id)
+        public async Task<TEntity> GetById(int id)
         {
-            return _entities.Find(id);
+            return await _entities.FindAsync(id);
         }
-        public void Add(TEntity entity)
+        public async Task Add(TEntity entity)
         {
-            _entities.Add(entity);
+           await _entities.AddAsync(entity);
         }
 
-        public int SaveChanges()
+        public async Task<int> SaveChanges()
         {
-            return _context.SaveChanges();
+            return await _context.SaveChangesAsync();
         }
     }
 }

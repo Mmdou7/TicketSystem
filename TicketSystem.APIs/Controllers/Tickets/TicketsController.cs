@@ -36,7 +36,7 @@ public class TicketsController : ControllerBase
         var obj = new { msg = result };
         return Ok(obj);
     }
-    [HttpPut("changeStatus/{id}")]
+    [HttpPost("changeStatus/{id}")]
     public async Task<IActionResult> ChangeStatus(int id)
     {
         var result = await _ticketManager.ChangeStatusAsync(id);
