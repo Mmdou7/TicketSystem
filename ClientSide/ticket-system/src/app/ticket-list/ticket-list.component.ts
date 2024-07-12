@@ -28,14 +28,13 @@ export class TicketListComponent implements OnInit {
     }, (error) => {
       console.error('Error fetching tickets:', error);
     });
-    console.log(this.tickets);
   }
 
 
   handleTicket(ticketId: number): void {
     this.ticketService.handleTicket(ticketId).subscribe(
       () => {
-        this.loadTickets(); // Refresh the list after handling the ticket
+        this.loadTickets();
       },
       (error) => {
         console.error('Error handling ticket:', error);
