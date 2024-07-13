@@ -1,8 +1,8 @@
 import { Component, ElementRef, OnInit } from '@angular/core';
-import { TicketService } from '../ticket.service';
-import { TicketReadVm } from '../ticket-read-vm';
-import { PagedResultVm } from '../paged-result-vm';
-import { TicketFilterInputVm } from '../ticket-filter-input-vm';
+import { TicketService } from '../_services/ticket.service';
+import { TicketReadVm } from '../_models/ticket-read-vm';
+import { PagedResultVm } from '../_models/paged-result-vm';
+import { TicketFilterInputVm } from '../_models/ticket-filter-input-vm';
 
 @Component({
   selector: 'app-ticket-list',

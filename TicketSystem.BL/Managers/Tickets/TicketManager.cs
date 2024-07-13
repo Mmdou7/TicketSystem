@@ -16,7 +16,7 @@ public class TicketManager : ITicketManager
     }
     public async Task<PagedResultVm<TicketReadVm>> FilterAsync(TicketFilterInputVm model)
     {
-        IEnumerable<Ticket> query = _ticketRepository.GetAll();
+        var query = _ticketRepository.GetAll();
 
         #region OldHandlingForUpdateIsHandle        
         //bool isUpdated = false;

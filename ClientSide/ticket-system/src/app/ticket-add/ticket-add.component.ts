@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { TicketService } from '../ticket.service';
+import { TicketService } from '../_services/ticket.service';
 
 @Component({
   selector: 'app-ticket-add',

@@ -1,9 +1,10 @@
 <div class="container-fluid">
     <h2>Ticket List</h2>
-    <div class="row">
+    <p *ngIf="!tickets?.result"><em>Loading...</em></p>
+    <div class="row" *ngIf="tickets?.result">
         <div class="col">
-            <button class="btn btn-primary" [routerLink]="['/add-ticket']">Add Ticket</button>
-            <table class="table table-striped">
+            <button class="btn btn-primary" aria-labelledby="tableLabel" [routerLink]="['/add-ticket']">Add Ticket</button>
+            <table class="table border m-1 text-center">
                 <!-- Table headers -->
                 <thead>
                     <tr>
