@@ -17,21 +17,23 @@ public class TicketManager : ITicketManager
     public async Task<PagedResultVm<TicketReadVm>> FilterAsync(TicketFilterInputVm model)
     {
         IEnumerable<Ticket> query = _ticketRepository.GetAll();
-        bool isUpdated = false;
 
-        foreach (var ticket in query)
-        {
-            if (ticket.CreationDateTime >= DateTime.Now.AddMinutes(-60) && !ticket.isHandled)
-            {
-                ticket.isHandled = true;
-                isUpdated = true;
-            }
-        }
-        if (isUpdated)
-        {
-            await _ticketRepository.SaveChanges();
-        }
-        
+        #region OldHandlingForUpdateIsHandle        
+        //bool isUpdated = false;
+        //foreach (var ticket in query)
+        //{
+        //    if (ticket.CreationDateTime >= DateTime.Now.AddMinutes(-60) && !ticket.isHandled)
+        //    {
+        //        ticket.isHandled = true;
+        //        isUpdated = true;
+        //    }
+        //}
+        //if (isUpdated)
+        //{
+        //    await _ticketRepository.SaveChanges();
+        //}
+        #endregion
+
         var pagedTickets = query.Skip(model.PageSize * --model.PageNumber).Take(model.PageSize).Select(t => new TicketReadVm
         {
             Id = t.Id,
@@ -66,16 +68,18 @@ public class TicketManager : ITicketManager
                 Data = null
             };
         }
-        bool isUpdated = false;
-        if (ticket.CreationDateTime >= DateTime.Now.AddMinutes(-60) && !ticket.isHandled)
-        {
-            ticket.isHandled = true;
-            isUpdated = true;
-        }
-        if (isUpdated)
-        {
-            await _ticketRepository.SaveChanges();
-        }
+        #region OldHandlingForIsHandle
+        //bool isUpdated = false;
+        //if (ticket.CreationDateTime >= DateTime.Now.AddMinutes(-60) && !ticket.isHandled)
+        //{
+        //    ticket.isHandled = true;
+        //    isUpdated = true;
+        //}
+        //if (isUpdated)
+        //{
+        //    await _ticketRepository.SaveChanges();
+        //}
+        #endregion
 
         return new GeneralResponse<TicketReadVm>
         {
