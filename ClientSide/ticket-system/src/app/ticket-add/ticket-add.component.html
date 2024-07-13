@@ -1,0 +1,38 @@
+<div class="container">
+    <h2>Add Ticket</h2>
+    <form [formGroup]="addTicketForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="phoneNumber">Phone Number</label>
+        <input id="phoneNumber" formControlName="phoneNumber" class="form-control">
+      </div>
+  
+      <div class="form-group">
+        <label for="governorate">Governorate</label>
+        <select id="governorate" formControlName="governorate" class="form-control">
+          <option *ngFor="let gov of governorates" [value]="gov">{{ gov }}</option>
+        </select>
+      </div>
+  
+      <div class="form-group">
+        <label for="city">City</label>
+        <select id="city" formControlName="city" class="form-control">
+          <option *ngFor="let city of cities" [value]="city">{{ city }}</option>
+        </select>
+      </div>
+  
+      <div class="form-group">
+        <label for="district">District</label>
+        <select id="district" formControlName="district" class="form-control">
+          <option *ngFor="let district of districts" [value]="district">{{ district }}</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="creationDateTime">Creation Date Time:</label>
+        <input type="datetime-local" id="creationDateTime" formControlName="creationDateTime" class="form-control" />
+      </div>
+  
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+  </div>
+  

@@ -22,4 +22,9 @@ export class TicketService {
     const url = `${this.apiUrl}/changeStatus/${ticketId}`;
     return this.http.post<any>(url, {}); // POST request with an empty body
   }
+
+  addTicket(ticket: any): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/add`, ticket);
+  }
+  
 }

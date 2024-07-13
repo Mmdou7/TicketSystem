@@ -29,7 +29,7 @@ public class TicketsController : ControllerBase
         return Ok(result);
     }
 
-    [HttpPost]
+    [HttpPost("add")]
     public async Task<IActionResult> AddTicket(TicketAddVm ticket)
     {
         var result = await _ticketManager.AddTicketAsync(ticket);

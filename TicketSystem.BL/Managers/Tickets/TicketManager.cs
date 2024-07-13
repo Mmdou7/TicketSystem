@@ -96,6 +96,15 @@ public class TicketManager : ITicketManager
 
     public async Task<GeneralResponse<string>> AddTicketAsync(TicketAddVm model)
     {
+        if (model.CreationDateTime > DateTime.Now)
+        {
+            return new GeneralResponse<string>
+            {
+                StatusCode = 009,
+                Message = ErrorMessages.InvalidModel,
+                Data = null
+            };
+        }
         if (model == null || string.IsNullOrEmpty(model.PhoneNumber) ||
             string.IsNullOrEmpty(model.City) ||
             string.IsNullOrEmpty(model.Governorate) ||
@@ -119,14 +128,16 @@ public class TicketManager : ITicketManager
         }
         try
         {
+            bool isTicketHandled = (DateTime.Now - model.CreationDateTime).TotalMinutes <= 60 ? true : false;
             Ticket ticket = new Ticket()
             {
                 PhoneNumber = model.PhoneNumber,
-                CreationDateTime = DateTime.Now,
+                //CreationDateTime = DateTime.Now,
+                CreationDateTime = model.CreationDateTime,
                 City = model.City,
                 Governorate = model.Governorate,
                 District = model.District,
-                isHandled = false
+                isHandled = isTicketHandled
             };
             await _ticketRepository.Add(ticket);
             await _ticketRepository.SaveChanges();

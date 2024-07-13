@@ -78,29 +78,4 @@ export class TicketListComponent implements OnInit {
       return 'table-danger';
     }
   }
-  
-  // applyTicketColors(): void {
-  //   if (this.tickets && this.tickets.result) {
-  //     this.tickets.result.forEach(ticket => {
-  //       ticket.colorClass = this.getTicketColor(ticket); // Add colorClass property
-  //     });
-  //   }
-  // }
-
-  // getTicketColor(ticket: TicketReadVm): string {
-  //   const creationDate = new Date(ticket.creationDateTime);
-  //   const now = new Date();
-  //   const minutesAgo = Math.floor((now.getTime() - creationDate.getTime()) / (1000 * 60));
-
-  //   if (minutesAgo <= 15) {
-  //     return 'ticket-yellow';
-  //   } else if (minutesAgo <= 30) {
-  //     return 'ticket-green';
-  //   } else if (minutesAgo <= 45) {
-  //     return 'ticket-blue';
-  //   } else {
-  //     return 'ticket-red';
-  //   }
-  // }
-
 }
